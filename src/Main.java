@@ -1,3 +1,4 @@
+import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -7,7 +8,8 @@ import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
@@ -44,9 +46,10 @@ public class Main {
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE); // the window will be maximized
 
         // Create the window
-        window = glfwCreateWindow(300, 300, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(800, 600, "Hello World!", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -57,25 +60,6 @@ public class Main {
         });
 
         // Get the thread stack and push a new frame
-        try ( MemoryStack stack = stackPush() ) {
-            IntBuffer pWidth = stack.mallocInt(1); // int*
-            IntBuffer pHeight = stack.mallocInt(1); // int*
-
-            // Get the window size passed to glfwCreateWindow
-            glfwGetWindowSize(window, pWidth, pHeight);
-
-            // Get the resolution of the primary monitor
-            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-            // Center the window
-            glfwSetWindowPos(
-                    window,
-                    (vidmode.width() - pWidth.get(0)) / 2,
-                    (vidmode.height() - pHeight.get(0)) / 2
-            );
-        } // the stack frame is popped automatically
-
-        // Make the OpenGL context current
         glfwMakeContextCurrent(window);
         // Enable v-sync
         glfwSwapInterval(1);
@@ -93,17 +77,101 @@ public class Main {
         GL.createCapabilities();
 
         // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.2f, 0.3f, 0.3f, 0.0f);
+
+        CharSequence vertexShaderCode = "#version 330 core\n"
+                + "layout (location = 0) in vec3 aPos;\n"
+                + "layout (location = 1) in vec3 aColor;\n"
+                + "out vec3 ourColor;\n"
+                + "void main()\n"
+                + "{\n"
+                + "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                + "    ourColor = aColor;\n"
+                + "}";
+
+        int vertShader = glCreateShader(GL_VERTEX_SHADER);
+
+        glShaderSource(vertShader, vertexShaderCode);
+        glCompileShader(vertShader);
+
+        IntBuffer success = BufferUtils.createIntBuffer(1024);
+        CharSequence infoLog;
+        glGetShaderiv(vertShader, GL_COMPILE_STATUS, success);
+
+        if(success.get(0) == GL_FALSE) {
+            infoLog = glGetShaderInfoLog(vertShader);
+            throw new RuntimeException("Error creating vertex shader: " + infoLog);
+        }
+
+        CharSequence fragmentShaderCode = "#version 330 core\n"
+                + "in vec3 ourColor;\n"
+                + "out vec4 FragColor;\n"
+                + "void main()\n"
+                + "{\n"
+                + "   FragColor = vec4(ourColor, 1.0f);\n"
+                + "}";
+
+        int fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+        glShaderSource(fragShader, fragmentShaderCode);
+        glCompileShader(fragShader);
+
+        glGetShaderiv(fragShader, GL_COMPILE_STATUS, success);
+
+        if(success.get(0) == GL_FALSE) {
+            infoLog = glGetShaderInfoLog(fragShader);
+            throw new RuntimeException("Error creating fragment shader: " + infoLog);
+        }
+
+        int program = glCreateProgram();
+
+        glAttachShader(program, vertShader);
+        glAttachShader(program, fragShader);
+        glLinkProgram(program);
+
+        glGetProgramiv(program, GL_LINK_STATUS, success);
+
+        if(success.get(0) == GL_FALSE) {
+            infoLog = glGetProgramInfoLog(program);
+            throw new RuntimeException("Error linking program: " + infoLog);
+        }
+
+        glUseProgram(program);
+
+        float []vertices = {
+                -0.5f,-0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+                 0.5f,-0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+                 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+        };
+
+        int VAO = glGenVertexArrays();
+        int VBO = glGenBuffers();
+
+        glBindVertexArray(VAO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * Float.BYTES, 0);
+        glEnableVertexAttribArray(0);
+
+        glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * Float.BYTES, 3 * Float.BYTES);
+        glEnableVertexAttribArray(1);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-            glfwSwapBuffers(window); // swap the color buffers
+            glUseProgram(program);
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+            glBindVertexArray(0);
 
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
+            glfwSwapBuffers(window); // swap the color buffer
             glfwPollEvents();
         }
     }
