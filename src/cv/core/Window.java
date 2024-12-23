@@ -17,6 +17,7 @@ public class Window {
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
         window = glfwCreateWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_TITLE, NULL, NULL);
 
@@ -25,9 +26,26 @@ public class Window {
 
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+                this.Close(); // We will detect this in the rendering loop
         });
         glfwMakeContextCurrent(window);
         glfwShowWindow(window);
+    }
+
+    public boolean IsOpen() {
+        return !glfwWindowShouldClose(window);
+    }
+
+    public void Update() {
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    public void Destroy() {
+        glfwDestroyWindow(window);
+        glfwTerminate();
+    }
+    public void Close() {
+        glfwSetWindowShouldClose(window, true);
     }
 }
