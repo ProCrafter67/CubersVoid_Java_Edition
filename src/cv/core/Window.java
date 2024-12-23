@@ -5,7 +5,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
 
-    private long window;
+    private final long window;
 
     private final int DEFAULT_WIDTH = 800;
     private final int DEFAULT_HEIGHT = 600;
