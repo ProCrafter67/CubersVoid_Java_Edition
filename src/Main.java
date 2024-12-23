@@ -1,10 +1,6 @@
 import cv.objects.Quad;
-import cv.objects.util.Mesh;
 import cv.objects.util.Renderer;
-import cv.shader.Shader;
 import org.lwjgl.opengl.*;
-
-import static org.lwjgl.opengl.GL20.*;
 
 import cv.core.Window;
 
@@ -48,5 +44,4 @@ public class Main {
     public static void main(String[] args) {
         new Main().run();
     }
-
 }
