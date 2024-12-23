@@ -1,5 +1,6 @@
 import cv.objects.Quad;
 import cv.objects.util.Mesh;
+import cv.objects.util.Renderer;
 import cv.shader.Shader;
 import org.lwjgl.opengl.*;
 
@@ -32,19 +33,13 @@ public class Main {
         GL.createCapabilities();
 
         Quad quad = new Quad();
-
-//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // To see the wireframe
+        Renderer renderer = new Renderer(quad);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( window.IsOpen() ) {
-            {
-                // Rendering
-                glClearColor(0.2f, 0.3f, 0.3f, 0.0f);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-                quad.Render();
-            }
+            // Rendering
+            renderer.Render();
 
             window.Update(); // swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         }
