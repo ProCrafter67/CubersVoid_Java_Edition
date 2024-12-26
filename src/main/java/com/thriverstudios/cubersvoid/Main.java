@@ -1,11 +1,10 @@
 package com.thriverstudios.cubersvoid;
 
-import com.thriverstudios.cubersvoid.launcher.*;
+import com.thriverstudios.cubersvoid.launcher.Launcher;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("CubersVoid is running!");
         Launcher launcher = new Launcher();
-        launcher.Run();
+        launcher.launch();
     }
 }
