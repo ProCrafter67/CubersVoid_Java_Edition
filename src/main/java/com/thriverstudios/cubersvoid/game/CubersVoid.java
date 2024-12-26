@@ -1,20 +1,21 @@
-package com.thriverstudios.cubersvoid;
+package com.thriverstudios.cubersvoid.game;
 
+import com.thriverstudios.cubersvoid.game.modules.core.Window;
 import com.thriverstudios.cubersvoid.game.modules.managers.GLErrorManager;
 import com.thriverstudios.cubersvoid.game.modules.objects.Quad;
 import com.thriverstudios.cubersvoid.game.modules.objects.util.Renderer;
-import com.thriverstudios.cubersvoid.game.modules.core.Window;
 
-public class Main {
+public class CubersVoid {
 
-    // The window handle
     private Window window;
 
-    public void run() {
+    public CubersVoid() {
         init();
-        loop();
+    }
 
-       window.Destroy();
+    public void Run() {
+        loop();
+        window.Destroy();
     }
 
     private void init() {
@@ -37,7 +38,4 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
-        new Main().run();
-    }
 }
