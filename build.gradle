@@ -16,15 +16,11 @@ repositories {
 }
 
 ext {
-    junitVersion = '5.10.0'
+    junitVersion = '5.10.2'
 }
 
-sourceCompatibility = '21'
-targetCompatibility = '21'
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
+sourceCompatibility = '23'
+targetCompatibility = '23'
 
 application {
     mainModule = 'com.thriverstudios.cubersvoid'
@@ -32,8 +28,8 @@ application {
 }
 
 javafx {
-    version = '21'
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' ]
+    version = '17.0.6'
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing']
 }
 
 dependencies {
@@ -55,23 +51,37 @@ dependencies {
     runtimeOnly("org.lwjgl:lwjgl-opengl::$lwjglNatives")
     runtimeOnly("org.lwjgl:lwjgl-stb::$lwjglNatives")
 
-    implementation('org.controlsfx:controlsfx:11.1.2')
+    implementation('org.controlsfx:controlsfx:11.2.1')
     implementation('com.dlsc.formsfx:formsfx-core:11.6.0') {
         exclude(group: 'org.openjfx')
     }
-    implementation('net.synedra:validatorfx:0.4.0') {
+    implementation('net.synedra:validatorfx:0.5.0') {
         exclude(group: 'org.openjfx')
     }
     implementation('org.kordamp.ikonli:ikonli-javafx:12.3.1')
     implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
-    implementation('eu.hansolo:tilesfx:11.48') {
+    implementation('eu.hansolo:tilesfx:21.0.3') {
         exclude(group: 'org.openjfx')
     }
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
 
-tasks.test {
+test {
     useJUnitPlatform()
+}
+
+jlink {
+    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'app'
+    }
+}
+
+jlinkZip {
+    group = 'distribution'
 }

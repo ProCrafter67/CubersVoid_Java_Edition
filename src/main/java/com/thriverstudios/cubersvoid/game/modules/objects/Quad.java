@@ -28,8 +28,8 @@ public class Quad extends Entity {
         };
 
         shader = new Shader(
-                "src/main/java/com/thriverstudios/cubersvoid/modules/shaders/quad.vert",
-                "src/main/java/com/thriverstudios/cubersvoid/modules/shaders/quad.frag"
+                "src/main/java/com/thriverstudios/cubersvoid/game/modules/shaders/quad.vert",
+                "src/main/java/com/thriverstudios/cubersvoid/game/modules/shaders/quad.frag"
         );
         mesh = new Mesh(vertices, indices);
         texture = new Texture("src/../assets/cubers_void/textures/block/Cobblestone.png", 0);
