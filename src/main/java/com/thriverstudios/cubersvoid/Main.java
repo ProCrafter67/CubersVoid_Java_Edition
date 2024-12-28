@@ -17,7 +17,11 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Home home = new Home(stage);
 
-        stage.getIcons().add(new Image("https://i.pinimg.com/736x/98/03/31/98033112849e4c64bf7375a7620ae624.jpg"));
+        stage.getIcons().add(
+                new Image(
+                        "https://raw.githubusercontent.com/ProCrafter67/CubersVoid_Java_Edition/refs/heads/master/src/main/resources/com/icon.jpg?token=GHSAT0AAAAAAC32HUDEHM57XWJ53NN26J3CZ3PFBGQ"
+                )
+        );
 
         stage.setTitle("CubersVoid");
         stage.setScene(home.getScene());

@@ -55,7 +55,7 @@ public class Home {
                 "-fx-scale-y: 100%;" +
                 "-fx-scale-z: 100%;" +
                 "-fx-opacity: 1.0;" +
-                "-fx-cursor: e-resize;"
+                "-fx-cursor: wait;"
         );
         label.setLabelFor(button);
 
