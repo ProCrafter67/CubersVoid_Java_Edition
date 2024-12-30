@@ -1,8 +1,8 @@
 package com.thriverstudios.cubersvoid.game.modules.objects;
 
 import com.thriverstudios.cubersvoid.game.modules.objects.util.Entity;
-import com.thriverstudios.cubersvoid.game.modules.objects.util.Mesh;
-import com.thriverstudios.cubersvoid.game.modules.objects.util.Texture;
+import com.thriverstudios.cubersvoid.game.modules.graphics.Mesh;
+import com.thriverstudios.cubersvoid.game.modules.graphics.Texture;
 import com.thriverstudios.cubersvoid.game.modules.shader.Shader;
 
 public class Quad extends Entity {
@@ -19,20 +19,18 @@ public class Quad extends Entity {
                 -0.5f,-0.5f, 0.0f,  0.0f, 0.0f,
                 -0.5f, 0.5f, 0.0f,  0.0f, 1.0f,
                  0.5f, 0.5f, 0.0f,  1.0f, 1.0f,
-                 0.5f,-0.5f, 0.0f,  1.0f, 0.0f
-        };
 
-        int []indices = {
-                0, 1, 2,
-                0, 2, 3
+                 0.5f, 0.5f, 0.0f,  1.0f, 1.0f,
+                 0.5f,-0.5f, 0.0f,  1.0f, 0.0f,
+                -0.5f,-0.5f, 0.0f,  0.0f, 0.0f,
         };
 
         shader = new Shader(
                 "src/main/java/com/thriverstudios/cubersvoid/game/modules/shaders/quad.vert",
                 "src/main/java/com/thriverstudios/cubersvoid/game/modules/shaders/quad.frag"
         );
-        mesh = new Mesh(vertices, indices);
-        texture = new Texture("src/../assets/cubers_void/textures/block/Cobblestone.png", 0);
+        mesh = new Mesh(vertices);
+        texture = new Texture("src/../assets/cubers_void/textures/block/Default.png", 0);
 
         shader.Use();
         shader.PutInt("uTexture", 0);
@@ -43,5 +41,11 @@ public class Quad extends Entity {
         texture.Bind();
         mesh.Render(6, 0);
         texture.Unbind();
+    }
+
+    public void Destroy() {
+        mesh.Destroy();
+        texture.Destroy();
+        shader.Delete();
     }
 }

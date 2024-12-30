@@ -15,16 +15,4 @@ public class GLStateManager {
     public void Disable(int capability) {
         glDisable(capability);
     }
-
-    private void Run(Callable<Void> callable, int capability) {
-        try {
-            if(glIsEnabled(capability)) {
-                callable.call();
-            } else {
-                throw new Exception("Cannot call Function");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

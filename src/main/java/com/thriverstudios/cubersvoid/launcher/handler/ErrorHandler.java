@@ -3,7 +3,7 @@ package com.thriverstudios.cubersvoid.launcher.handler;
 import com.thriverstudios.cubersvoid.core.Logger;
 import javafx.scene.control.Alert;
 
-import java.io.File;
+import java.util.Random;
 
 public class ErrorHandler {
 
@@ -13,7 +13,8 @@ public class ErrorHandler {
     }
 
     private static void ReportErrorLog(String error_message) {
-        Logger.LogError(error_message);
+        String cache_name = "JavaFX_Error" + new Random().nextLong(1000000000L);
+        Logger.LogError(cache_name, error_message);
     }
 
     private static void EnactReporterUI() {

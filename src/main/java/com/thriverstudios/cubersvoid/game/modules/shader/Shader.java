@@ -1,5 +1,6 @@
 package com.thriverstudios.cubersvoid.game.modules.shader;
 
+import org.joml.*;
 import org.lwjgl.BufferUtils;
 
 import java.io.*;
@@ -82,11 +83,49 @@ public class Shader {
         glUseProgram(program);
     }
 
+    public void PutBool(String name, boolean value) {
+        glUniform1i(glGetUniformLocation(program, name), value ? 1 : 0);
+    }
+
     public void PutInt(String name, int value) {
         glUniform1i(glGetUniformLocation(program, name), value);
     }
 
     public void PutFloat(String name, float value) {
         glUniform1f(glGetUniformLocation(program, name), value);
+    }
+
+    public void PutVec2(String name, Vector2f value) {
+        glUniform2f(glGetUniformLocation(program, name), value.x, value.y);
+    }
+
+    public void PutVec3(String name, Vector3f value) {
+        glUniform3f(glGetUniformLocation(program, name), value.x, value.y, value.z);
+    }
+
+    public void PutVec4(String name, Vector4f value) {
+        glUniform4f(glGetUniformLocation(program, name), value.x, value.y, value.z, value.w);
+    }
+
+    public void PutMat2(String name, Matrix2f value) {
+        float[] buffer = new float[]{};
+        value.get(buffer);
+        glUniformMatrix2fv(glGetUniformLocation(program, name), false, buffer);
+    }
+
+    public void PutMat3(String name, Matrix3f value) {
+        float[] buffer = new float[]{};
+        value.get(buffer);
+        glUniformMatrix3fv(glGetUniformLocation(program, name), false, buffer);
+    }
+
+    public void PutMat4(String name, Matrix4f value) {
+        float[] buffer = new float[]{};
+        value.get(buffer);
+        glUniformMatrix4fv(glGetUniformLocation(program, name), false, buffer);
+    }
+
+    public void Delete() {
+        glDeleteProgram(program);
     }
 }

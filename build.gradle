@@ -9,6 +9,7 @@ plugins {
 group 'com.thriverstudios.cubersvoid'
 version '1.0-SNAPSHOT'
 project.ext.lwjglVersion = "3.3.5"
+project.ext.jomlVersion = "1.10.7"
 project.ext.lwjglNatives = "natives-windows"
 
 repositories {
@@ -50,6 +51,8 @@ dependencies {
     runtimeOnly("org.lwjgl:lwjgl-openal::$lwjglNatives")
     runtimeOnly("org.lwjgl:lwjgl-opengl::$lwjglNatives")
     runtimeOnly("org.lwjgl:lwjgl-stb::$lwjglNatives")
+
+    implementation("org.joml:joml:$jomlVersion")
 
     implementation('org.controlsfx:controlsfx:11.2.1')
     implementation('com.dlsc.formsfx:formsfx-core:11.6.0') {

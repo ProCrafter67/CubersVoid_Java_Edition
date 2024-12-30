@@ -10,6 +10,7 @@ module com.thriverstudios.cubersvoid {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
 
+    requires org.joml;
     requires org.lwjgl;
     requires org.lwjgl.ktx;
     requires org.lwjgl.stb;

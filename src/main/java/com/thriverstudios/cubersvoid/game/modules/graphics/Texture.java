@@ -1,4 +1,4 @@
-package com.thriverstudios.cubersvoid.game.modules.objects.util;
+package com.thriverstudios.cubersvoid.game.modules.graphics;
 
 import org.lwjgl.BufferUtils;
 
@@ -51,5 +51,9 @@ public class Texture {
 
     public void Unbind() {
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    public void Destroy() {
+        glDeleteTextures(texture);
     }
 }
